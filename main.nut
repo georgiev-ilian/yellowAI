@@ -2,11 +2,16 @@ class YellowAI extends AIController
 {
     function Start();
     function SetCompanyName();
+    function FindHighestPolulation();
 }
 
 function YellowAI::Start()
 {
     this.SetCompanyName();
+
+    local topTown = this.FindHighestPolulation();
+
+    AILog.Info("Town with highest population is " + AITown.GetName(topTown));
 
     while (true) {
         AILog.Info("I am a very new AI with a ticker called Yellow and I am at tick " + this.GetTick());
@@ -24,4 +29,16 @@ function YellowAI::SetCompanyName()
             i++;
         }
     }
+}
+
+function YellowAI::FindHighestPolulation() 
+{
+    /* Get a list of all towns on the map. */
+    local townlist = AITownList();
+
+    /* Sort the list by population, highest population first. */
+    townlist.Valuate(AITown.GetPopulation);
+    townlist.Sort(AIList.SORT_BY_VALUE, true);
+
+    return townlist.Begin();
 }
